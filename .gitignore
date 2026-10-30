@@ -1,0 +1,29 @@
+# dependencies and build output
+node_modules/
+.next/
+dist/
+out/
+*.tsbuildinfo
+next-env.d.ts
+*.log
+.DS_Store
+
+# secrets
+.env
+.env*.local
+
+# runtime data (extraction logs, approvals, learned layouts) and client documents
+data/
+samples/
+heldout/
+
+# client ground truth: not published
+pipeline/eval/gold.json
+pipeline/eval/gold_lineitems.json
+pipeline/eval/last-gate-report.json
+
+# assistant / editor files
+.claude/
+CLAUDE.md
+.vscode/
+.idea/

@@ -1,0 +1,61 @@
+{
+  "name": "freight-extract",
+  "version": "1.0.0",
+  "description": "CPU-only OCR and field extraction for freight documents (BL, AWB/HAWB, packing list, commercial invoice, telex release, courier label). Node 24, no GPU, no cloud.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "models",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "example": "tsx examples/cli.ts",
+    "serve": "tsx examples/http-server.ts",
+    "batch": "tsx scripts/run.ts",
+    "eval": "tsx eval/score.ts",
+    "eval:dev": "tsx scripts/run.ts samples",
+    "eval:cold": "EVAL_COLD_START=1 OUT=out/cold tsx scripts/run.ts samples",
+    "eval:perturb": "tsx eval/perturb.ts samples scan150,dpi100,rot90,rot180,rot270,skew3,photo,dup,merged",
+    "eval:gate": "tsx eval/gate.ts",
+    "eval:all": "bash eval/run-all.sh samples",
+    "eval:lines": "tsx eval/score-lines.ts out/json --docs",
+    "eval:synthetic": "tsx eval/synthetic/make.ts && OUT=out/json tsx scripts/run.ts eval/synthetic/docs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.13",
+    "@nwpr/airport-codes": "^3.0.3",
+    "@tesseract.js-data/deu": "^1.0.0",
+    "@tesseract.js-data/eng": "^1.0.0",
+    "an-array-of-english-words": "^2.0.0",
+    "currency-codes": "^2.2.0",
+    "i18n-iso-countries": "^7.14.0",
+    "onnxruntime-node": "^1.30.0",
+    "sharp": "^0.35.5",
+    "tesseract.js": "^7.0.0",
+    "unpdf": "^1.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "pdf-lib": "^1.17.1"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

@@ -1,0 +1,42 @@
+# /etc/systemd/system/freight-ocr.service  (RHEL 8/9, Node 24)
+[Unit]
+Description=Freight Document Extractor (Next.js, CPU OCR)
+After=network.target
+
+[Service]
+Type=simple
+User=freightocr
+Group=freightocr
+WorkingDirectory=/opt/freight-ocr/frontend
+Environment=NODE_ENV=production
+Environment=PORT=3000
+# ONNX Runtime threads: leave 1 core for Node/Next on a 4 vCPU VM
+Environment=OCR_THREADS=3
+Environment=OCR_MODEL_DIR=/opt/freight-ocr/pipeline/models/ppocr-v4
+Environment=FEEDBACK_DIR=/var/lib/freight-ocr/feedback
+Environment=METRICS_DIR=/var/lib/freight-ocr/metrics
+Environment=LAYOUT_REGISTRY=/var/lib/freight-ocr/layouts.json
+# Max uploads processed or waiting at once; more get HTTP 429 + Retry-After
+Environment=MAX_QUEUE=8
+# First 2 weeks in production: nothing auto-accepted; /api/metrics measures live precision. Remove after gate G1.
+Environment=SHADOW_MODE=1
+# Pilot (after G1): turn SHADOW_MODE off and list only the fields that qualified, e.g.
+# Environment=AUTO_ACCEPT_FIELDS=bl_number,consignee,shipper,port_of_loading,port_of_discharge,gross_weight_kg
+# Secrets (AUTH_USERS=user:sha256,...) live here, mode 0600, not in the repo
+EnvironmentFile=/etc/freight-ocr/env
+# Listen on loopback only: nginx terminates TLS and is the only way in
+ExecStart=/usr/bin/node /opt/freight-ocr/node_modules/next/dist/bin/next start -H 127.0.0.1 -p 3000
+Restart=on-failure
+RestartSec=5
+# 8 GB VM: the process peaks around 1.5-3 GB; cap well below host RAM
+MemoryMax=5G
+LimitNOFILE=65536
+# hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/freight-ocr
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+# Daily backup of approvals (labelled data), extraction log and layout registry. Keeps 30 days.
+[Unit]
+Description=Backup freight-ocr data
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'cd /var/lib/freight-ocr && tar czf backups/fo-$(date +%%F).tgz feedback metrics $(test -f layouts.json && echo layouts.json) && find backups -name "fo-*.tgz" -mtime +30 -delete'

@@ -1,0 +1,169 @@
+{
+ "tolerance": 0.5,
+ "sets": {
+  "dev": {
+   "dir": "out/json",
+   "gold": "eval/gold.json",
+   "required": true,
+   "note": "the 24 client docs (frozen golden set; rules were written on it)",
+   "targets": [
+    {
+     "metric": "docTypeAccuracy",
+     "min": 100
+    },
+    {
+     "metric": "fields.f1",
+     "min": 99
+    },
+    {
+     "metric": "fields.autoAcceptPrecision",
+     "min": 99.5
+    },
+    {
+     "metric": "stp.precision",
+     "min": 100
+    },
+    {
+     "metric": "latencyMs.textLayer.p95",
+     "max": 2000
+    },
+    {
+     "metric": "latencyMs.ocr.p95",
+     "max": 45000
+    }
+   ]
+  },
+  "perturb": {
+   "dir": "out/perturb",
+   "gold": "eval/gold.json",
+   "required": true,
+   "note": "the 24 as production may send them: rotated, low dpi, skewed, phone photo, duplicated pages, merged PDF",
+   "targets": [
+    {
+     "metric": "docTypeAccuracy",
+     "min": 95
+    },
+    {
+     "metric": "fields.autoAcceptPrecision",
+     "min": 99
+    },
+    {
+     "metric": "byVariant.*.autoAcceptPrecision",
+     "min": 98
+    },
+    {
+     "metric": "fields.catchRate",
+     "min": 90
+    },
+    {
+     "metric": "stp.precision",
+     "min": 98
+    }
+   ]
+  },
+  "cold": {
+   "dir": "out/cold",
+   "gold": "eval/gold.json",
+   "required": false,
+   "note": "the 24 with no master data and no learned layouts (a sender's first upload / template change)",
+   "targets": [
+    {
+     "metric": "fields.autoAcceptPrecision",
+     "min": 99
+    },
+    {
+     "metric": "stp.precision",
+     "min": 98
+    }
+   ]
+  },
+  "held_real": {
+   "dir": "out/held_real",
+   "gold": "eval/heldout/gold_real.json",
+   "required": false,
+   "note": "42 real/realistic public docs, layouts never seen",
+   "targets": [
+    {
+     "metric": "fields.autoAcceptPrecision",
+     "min": 99
+    },
+    {
+     "metric": "fields.catchRate",
+     "min": 90
+    }
+   ]
+  },
+  "held_gen": {
+   "dir": "out/held_gen",
+   "gold": "eval/heldout/gold_gen.json",
+   "required": false,
+   "note": "230 third-party generated shipping docs",
+   "targets": [
+    {
+     "metric": "fields.autoAcceptPrecision",
+     "min": 99
+    }
+   ]
+  }
+ },
+ "baseline": {
+  "dev": {
+   "docTypeAccuracy": 100,
+   "fields.f1": 100,
+   "fields.precision": 100,
+   "fields.recall": 100,
+   "fields.autoAcceptPrecision": 100,
+   "fields.coverage": 93.94,
+   "stp.rate": 83.33,
+   "stp.cleanDocRate": 45.83,
+   "calibration.ece": 0.0891
+  },
+  "perturb": {
+   "docTypeAccuracy": 100,
+   "fields.f1": 97.92,
+   "fields.precision": 98.92,
+   "fields.recall": 96.95,
+   "fields.autoAcceptPrecision": 99.95,
+   "fields.catchRate": 96,
+   "fields.coverage": 88.11,
+   "stp.rate": 49.53,
+   "stp.cleanDocRate": 39.25,
+   "calibration.ece": 0.0845
+  },
+  "cold": {
+   "docTypeAccuracy": 100,
+   "fields.f1": 98.86,
+   "fields.precision": 98.86,
+   "fields.recall": 98.86,
+   "fields.autoAcceptPrecision": 100,
+   "fields.catchRate": 100,
+   "fields.coverage": 43.94,
+   "stp.rate": 4.17,
+   "stp.cleanDocRate": 4.17,
+   "calibration.ece": 0.1409
+  },
+  "held_real": {
+   "docTypeAccuracy": 90.48,
+   "fields.f1": 80.77,
+   "fields.precision": 92.31,
+   "fields.recall": 71.79,
+   "fields.autoAcceptPrecision": 100,
+   "fields.catchRate": 100,
+   "fields.coverage": 21.98,
+   "stp.rate": 0,
+   "stp.cleanDocRate": 71.43,
+   "calibration.ece": 0.1243
+  },
+  "held_gen": {
+   "docTypeAccuracy": 100,
+   "fields.f1": 100,
+   "fields.precision": 100,
+   "fields.recall": 100,
+   "fields.autoAcceptPrecision": 100,
+   "fields.coverage": 24.8,
+   "stp.rate": 0,
+   "stp.cleanDocRate": 21.74,
+   "calibration.ece": 0.1619
+  }
+ }
+}

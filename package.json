@@ -1,0 +1,21 @@
+{
+  "name": "freight-ocr",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "CPU-only OCR and field extraction for freight documents: pipeline/ (library) + frontend/ (review UI and API)",
+  "workspaces": [
+    "pipeline",
+    "frontend"
+  ],
+  "scripts": {
+    "test": "npm test -w pipeline",
+    "pipeline:serve": "npm run serve -w pipeline",
+    "dev": "npm run dev -w frontend",
+    "build": "npm run build -w frontend",
+    "start": "npm start -w frontend"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}
